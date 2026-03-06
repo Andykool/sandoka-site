@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, signal, AfterViewInit, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal, inject, afterNextRender} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule, FormBuilder, FormGroup} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
@@ -11,7 +11,7 @@ import {animate, stagger, inView} from "motion";
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements AfterViewInit {
+export class App {
   private fb = inject(FormBuilder);
   searchForm: FormGroup;
   activeTab = signal<'flights' | 'hotels' | 'cars' | 'packages'>('flights');
@@ -65,31 +65,37 @@ export class App implements AfterViewInit {
         this.isScrolled.set(window.scrollY > 50);
       });
     }
-  }
 
-  ngAfterViewInit() {
-    this.initAnimations();
+    afterNextRender(() => {
+      this.initAnimations();
+    });
   }
 
   initAnimations() {
-    // Animate hero content
-    animate(".hero-title", { opacity: [0, 1], y: [50, 0] }, { duration: 1, ease: "easeOut" });
-    animate(".hero-sub", { opacity: [0, 1], y: [30, 0] }, { duration: 1, delay: 0.3, ease: "easeOut" });
-    animate(".booking-bar", { opacity: [0, 1], scale: [0.95, 1] }, { duration: 0.8, delay: 0.6, ease: "easeOut" });
+    try {
+      // Animate hero content
+      animate(".hero-title", { opacity: [0, 1], y: [50, 0] }, { duration: 1, ease: "easeOut" });
+      animate(".hero-sub", { opacity: [0, 1], y: [30, 0] }, { duration: 1, delay: 0.3, ease: "easeOut" });
+      animate(".booking-bar", { opacity: [0, 1], scale: [0.95, 1] }, { duration: 0.8, delay: 0.6, ease: "easeOut" });
 
-    // Animate sections on scroll
-    inView(".reveal-section", (element) => {
-      animate(element, { opacity: [0, 1], y: [50, 0] }, { duration: 0.8, ease: "easeOut" });
-    });
-
-    inView(".reveal-grid", (element) => {
-      const children = element.querySelectorAll(".grid-item");
-      animate(children, { opacity: [0, 1], y: [30, 0] }, { 
-        delay: stagger(0.1),
-        duration: 0.6,
-        ease: "easeOut"
+      // Animate sections on scroll
+      inView(".reveal-section", (element) => {
+        animate(element, { opacity: [0, 1], y: [50, 0] }, { duration: 0.8, ease: "easeOut" });
       });
-    });
+
+      inView(".reveal-grid", (element) => {
+        const children = element.querySelectorAll(".grid-item");
+        if (children.length > 0) {
+          animate(children, { opacity: [0, 1], y: [30, 0] }, { 
+            delay: stagger(0.1),
+            duration: 0.6,
+            ease: "easeOut"
+          });
+        }
+      });
+    } catch (err) {
+      console.warn('Animation initialization failed:', err);
+    }
   }
 
   setTab(tab: 'flights' | 'hotels' | 'cars' | 'packages') {
@@ -98,6 +104,5 @@ export class App implements AfterViewInit {
 
   onSearch() {
     console.log('Searching...', this.searchForm.value);
-    // Mock search action
   }
 }
