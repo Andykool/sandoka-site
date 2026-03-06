@@ -1,0 +1,5 @@
+{
+  "name": "SANDOKAN TRAVEL",
+  "description": "Agence de voyage haut de gamme à Abidjan, Côte d'Ivoire. Réservation de vols, hôtels, locations de voitures et séjours sur mesure.",
+  "requestFramePermissions": ["geolocation"]
+}

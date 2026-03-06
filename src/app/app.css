@@ -1,0 +1,45 @@
+.hero-title {
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.booking-bar {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.booking-bar:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 60px -12px rgba(0,0,0,0.25);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Material icon sizing */
+.mat-icon {
+  width: auto;
+  height: auto;
+  font-size: inherit;
+}
+
+input::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+select {
+  appearance: none;
+}

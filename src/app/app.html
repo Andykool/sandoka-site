@@ -1,0 +1,371 @@
+<div class="min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav [class.bg-white]="isScrolled()" [class.shadow-md]="isScrolled()" [class.py-4]="isScrolled()" [class.py-6]="!isScrolled()"
+       class="fixed top-0 left-0 w-full z-50 transition-all duration-300 px-6 md:px-12 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <mat-icon class="text-4xl" [class.text-white]="!isScrolled()" [class.text-blue-600]="isScrolled()" style="font-size: 36px; width: 36px; height: 36px;">flight_takeoff</mat-icon>
+      <span class="text-xl font-bold tracking-tighter" [class.text-white]="!isScrolled()" [class.text-blue-600]="isScrolled()">SANDOKAN TRAVEL</span>
+    </div>
+    
+    <div class="hidden md:flex items-center gap-8 font-medium" [class.text-white]="!isScrolled()" [class.text-black]="isScrolled()">
+      <a href="#" class="hover:opacity-70 transition-opacity">Destinations</a>
+      <a href="#" class="hover:opacity-70 transition-opacity">Packages</a>
+      <a href="#" class="hover:opacity-70 transition-opacity">Hôtels</a>
+      <a href="#" class="hover:opacity-70 transition-opacity">Voitures</a>
+      <a href="#" class="hover:opacity-70 transition-opacity">Contact</a>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <button class="px-6 py-2 rounded-full font-semibold transition-all"
+              [class.bg-white]="!isScrolled()" [class.text-blue-600]="!isScrolled()"
+              [class.bg-blue-600]="isScrolled()" [class.text-white]="isScrolled()">
+        Réserver
+      </button>
+      <button class="md:hidden" [class.text-white]="!isScrolled()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative h-screen w-full flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="https://images.unsplash.com/photo-1572331165267-854da2b10ccc?q=80&w=2000&auto=format&fit=crop" 
+           alt="Abidjan" class="w-full h-full object-cover brightness-50" referrerpolicy="no-referrer">
+    </div>
+
+    <div class="relative z-10 max-w-4xl">
+      <h1 class="hero-title text-5xl md:text-8xl font-display text-white mb-6 leading-tight">
+        Explorez le monde depuis <span class="italic text-blue-400">Abidjan</span>
+      </h1>
+      <p class="hero-sub text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto font-light">
+        Découvrez des destinations d'exception avec SANDOKAN TRAVEL. Votre aventure commence ici.
+      </p>
+
+      <!-- Smart Booking Bar -->
+      <div class="booking-bar bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full p-2 shadow-2xl max-w-5xl mx-auto">
+        <div class="flex flex-wrap md:flex-nowrap items-center">
+          <!-- Tabs -->
+          <div class="flex md:flex-col border-b md:border-b-0 md:border-r border-gray-200 p-2 gap-1">
+            <button (click)="setTab('flights')" [class.bg-blue-600]="activeTab() === 'flights'" [class.text-white]="activeTab() === 'flights'"
+                    class="p-3 rounded-full transition-all flex items-center justify-center">
+              <mat-icon>flight</mat-icon>
+            </button>
+            <button (click)="setTab('hotels')" [class.bg-blue-600]="activeTab() === 'hotels'" [class.text-white]="activeTab() === 'hotels'"
+                    class="p-3 rounded-full transition-all flex items-center justify-center">
+              <mat-icon>hotel</mat-icon>
+            </button>
+            <button (click)="setTab('cars')" [class.bg-blue-600]="activeTab() === 'cars'" [class.text-white]="activeTab() === 'cars'"
+                    class="p-3 rounded-full transition-all flex items-center justify-center">
+              <mat-icon>directions_car</mat-icon>
+            </button>
+          </div>
+
+          <!-- Form Fields -->
+          <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4 p-4 text-left">
+            <div class="flex flex-col">
+              <label for="origin" class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Départ</label>
+              <input id="origin" type="text" formControlName="origin" placeholder="Ville de départ" class="bg-transparent border-none focus:ring-0 p-0 font-medium text-black">
+            </div>
+            <div class="flex flex-col">
+              <label for="destination" class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Destination</label>
+              <input id="destination" type="text" formControlName="destination" placeholder="Où allez-vous ?" class="bg-transparent border-none focus:ring-0 p-0 font-medium text-black">
+            </div>
+            <div class="flex flex-col">
+              <label for="dates" class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Dates</label>
+              <input id="dates" type="text" placeholder="Sélectionner dates" class="bg-transparent border-none focus:ring-0 p-0 font-medium text-black">
+            </div>
+            <div class="flex items-center justify-end">
+              <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-full transition-all flex items-center gap-2 w-full md:w-auto justify-center">
+                Rechercher <mat-icon>search</mat-icon>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white animate-bounce">
+      <mat-icon>expand_more</mat-icon>
+    </div>
+  </section>
+
+  <!-- Popular Destinations -->
+  <section class="py-24 px-6 md:px-12 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 reveal-section">
+        <div>
+          <h2 class="text-4xl md:text-5xl font-display mb-4">Destinations Populaires</h2>
+          <p class="text-gray-500 max-w-lg">Les lieux les plus prisés par nos voyageurs ivoiriens cette saison.</p>
+        </div>
+        <button class="text-black font-bold border-b-2 border-black pb-1 hover:opacity-60 transition-opacity">Voir tout</button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 reveal-grid">
+        @for (dest of destinations; track dest.name) {
+          <div class="grid-item group cursor-pointer">
+            <div class="relative aspect-[4/5] overflow-hidden rounded-3xl mb-4">
+              <img [src]="dest.image" [alt]="dest.name" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" referrerpolicy="no-referrer">
+              <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-4 py-1 rounded-full text-xs font-bold">
+                {{ dest.price }}
+              </div>
+            </div>
+            <h3 class="text-2xl font-display mb-2">{{ dest.name }}</h3>
+            <p class="text-gray-500 text-sm mb-4">{{ dest.desc }}</p>
+            <button class="flex items-center gap-2 text-sm font-bold group-hover:gap-4 transition-all">
+              Découvrir <mat-icon class="text-sm">arrow_forward</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Travel Packages -->
+  <section class="py-24 px-6 md:px-12 bg-stone-100">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal-section">
+        <h2 class="text-4xl md:text-5xl font-display mb-4">Packages de Voyage</h2>
+        <p class="text-gray-500">Des séjours tout compris pour une expérience sans souci.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal-grid">
+        @for (pkg of packages; track pkg.title) {
+          <div class="grid-item bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all group">
+            <div class="h-48 overflow-hidden">
+              <img [src]="pkg.image" [alt]="pkg.title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" referrerpolicy="no-referrer">
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">{{ pkg.title }}</h3>
+              <p class="text-gray-500 text-sm mb-4 line-clamp-2">{{ pkg.desc }}</p>
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-blue-600">{{ pkg.price }}</span>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-blue-700 transition-colors">Réserver</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Hotels & Cars Split -->
+  <section class="py-24 px-6 md:px-12 bg-white">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <!-- Hotels -->
+      <div class="reveal-section">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-3xl font-display">Hôtels de Luxe</h2>
+          <button class="text-sm font-bold underline">Voir plus</button>
+        </div>
+        <div class="space-y-6">
+          @for (hotel of hotels; track hotel.name) {
+            <div class="flex gap-4 p-4 rounded-3xl hover:bg-gray-50 transition-colors group cursor-pointer">
+              <div class="w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0">
+                <img [src]="hotel.image" [alt]="hotel.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" referrerpolicy="no-referrer">
+              </div>
+              <div class="flex flex-col justify-between py-1">
+                <div>
+                  <div class="flex text-yellow-400 mb-1">
+                    @for (i of [1,2,3,4,5].slice(0, hotel.rating); track i) {
+                      <mat-icon class="text-sm">star</mat-icon>
+                    }
+                  </div>
+                  <h3 class="font-bold text-lg">{{ hotel.name }}</h3>
+                  <div class="flex gap-2 mt-2">
+                    @for (amenity of hotel.amenities; track amenity) {
+                      <mat-icon class="text-gray-400 text-sm">{{ amenity }}</mat-icon>
+                    }
+                  </div>
+                </div>
+                <div class="flex items-center gap-4">
+                  <span class="font-bold text-sm">{{ hotel.price }} / nuit</span>
+                  <button class="text-xs font-bold text-blue-600">Réserver l'hôtel</button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Cars -->
+      <div class="reveal-section">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-3xl font-display">Location de Voitures</h2>
+          <button class="text-sm font-bold underline">Voir plus</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          @for (car of cars; track car.model) {
+            <div class="bg-gray-50 p-6 rounded-3xl group cursor-pointer">
+              <img [src]="car.image" [alt]="car.model" class="w-full h-32 object-contain mb-4 group-hover:scale-105 transition-transform" referrerpolicy="no-referrer">
+              <h3 class="font-bold mb-1">{{ car.model }}</h3>
+              <div class="flex items-center gap-2 text-gray-500 text-xs mb-4">
+                <mat-icon class="text-sm">person</mat-icon> {{ car.capacity }} passagers
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-sm">{{ car.price }} / jour</span>
+                <button class="bg-white border border-blue-600 text-blue-600 px-4 py-2 rounded-full text-xs font-bold hover:bg-blue-600 hover:text-white transition-all">Louer</button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-24 px-6 md:px-12 bg-blue-900 text-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal-section">
+        <h2 class="text-4xl md:text-5xl font-display mb-4">Avis de nos Voyageurs</h2>
+        <p class="text-white/60">Ce que nos clients disent de leur expérience avec nous.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 reveal-grid">
+        @for (t of testimonials; track t.name) {
+          <div class="grid-item flex flex-col items-center text-center">
+            <mat-icon class="text-blue-400 text-5xl mb-6">format_quote</mat-icon>
+            <p class="text-xl italic mb-8 font-light leading-relaxed">"{{ t.comment }}"</p>
+            <h4 class="font-bold">{{ t.name }}</h4>
+            <span class="text-white/40 text-sm">{{ t.role }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="py-24 px-6 md:px-12 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="reveal-section">
+          <h2 class="text-4xl md:text-5xl font-display mb-8">Pourquoi nous choisir ?</h2>
+          <div class="space-y-8">
+            <div class="flex gap-6">
+              <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <mat-icon class="text-blue-600">local_offer</mat-icon>
+              </div>
+              <div>
+                <h4 class="font-bold text-lg mb-2">Meilleures offres de voyage</h4>
+                <p class="text-gray-500">Nous négocions les meilleurs tarifs pour vous garantir un rapport qualité-prix exceptionnel.</p>
+              </div>
+            </div>
+            <div class="flex gap-6">
+              <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <mat-icon class="text-blue-600">bolt</mat-icon>
+              </div>
+              <div>
+                <h4 class="font-bold text-lg mb-2">Réservation simple et rapide</h4>
+                <p class="text-gray-500">Une plateforme intuitive pour réserver vos billets et hôtels en quelques clics seulement.</p>
+              </div>
+            </div>
+            <div class="flex gap-6">
+              <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <mat-icon class="text-blue-600">support_agent</mat-icon>
+              </div>
+              <div>
+                <h4 class="font-bold text-lg mb-2">Assistance 24h/24</h4>
+                <p class="text-gray-500">Nos experts basés à Abidjan sont à votre écoute à tout moment de votre voyage.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="relative reveal-section">
+          <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1000&auto=format&fit=crop" 
+               alt="Travel Planning" class="rounded-[3rem] shadow-2xl" referrerpolicy="no-referrer">
+          <div class="absolute -bottom-8 -left-8 bg-white p-8 rounded-3xl shadow-xl hidden md:block">
+            <div class="text-4xl font-bold text-black mb-1">10k+</div>
+            <div class="text-gray-500 text-sm">Voyageurs satisfaits</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="py-24 px-6 md:px-12 bg-stone-900 text-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div class="reveal-section">
+          <h2 class="text-4xl font-display mb-6">Contactez-nous</h2>
+          <p class="text-white/60 mb-12">Prêt pour votre prochaine aventure ? Notre équipe à Abidjan est là pour vous accompagner.</p>
+          
+          <div class="space-y-6 mb-12">
+            <div class="flex items-center gap-4">
+              <mat-icon class="text-blue-600">location_on</mat-icon>
+              <span>8254+5HG, Abidjan, Côte d’Ivoire</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <mat-icon class="text-blue-600">phone</mat-icon>
+              <span>+225 07 08 08 3030</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <mat-icon class="text-blue-600">mail</mat-icon>
+              <span>contact&#64;sandokantravel.ci</span>
+            </div>
+          </div>
+
+          <!-- Google Maps Iframe -->
+          <div class="w-full h-64 rounded-3xl overflow-hidden mb-12 shadow-lg border border-blue-100">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.5!2d-3.98!3d5.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMjEnMDAuMCJOIDPCsDU4JzQ4LjAiVw!5e0!3m2!1sfr!2sci!4v1710000000000!5m2!1sfr!2sci" 
+              width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+
+          <div class="flex gap-4">
+            <button class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full font-bold flex items-center gap-2 transition-all">
+              <mat-icon>chat</mat-icon> WhatsApp
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[2rem] p-8 md:p-12 text-black reveal-section">
+          <form class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="flex flex-col">
+                <label for="contact-name" class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Nom complet</label>
+                <input id="contact-name" type="text" class="border-b border-gray-200 py-2 focus:border-black outline-none transition-colors">
+              </div>
+              <div class="flex flex-col">
+                <label for="contact-email" class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Email</label>
+                <input id="contact-email" type="email" class="border-b border-gray-200 py-2 focus:border-black outline-none transition-colors">
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <label for="contact-subject" class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Sujet</label>
+              <select id="contact-subject" class="border-b border-gray-200 py-2 focus:border-black outline-none transition-colors bg-transparent">
+                <option>Réservation de vol</option>
+                <option>Hôtel</option>
+                <option>Package personnalisé</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            <div class="flex flex-col">
+              <label for="contact-message" class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Message</label>
+              <textarea id="contact-message" rows="4" class="border-b border-gray-200 py-2 focus:border-black outline-none transition-colors resize-none"></textarea>
+            </div>
+            <button class="w-full bg-black text-white py-4 rounded-full font-bold hover:bg-gray-800 transition-colors">Envoyer le message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 md:px-12 bg-blue-950 border-t border-white/10 text-white/40 text-sm">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+      <div class="flex items-center gap-2 text-white">
+        <mat-icon class="text-3xl" style="font-size: 30px; width: 30px; height: 30px;">flight_takeoff</mat-icon>
+        <span class="font-bold tracking-tighter">SANDOKAN TRAVEL</span>
+      </div>
+      <div class="flex gap-8">
+        <a href="#" class="hover:text-white transition-colors">Confidentialité</a>
+        <a href="#" class="hover:text-white transition-colors">Conditions</a>
+        <a href="#" class="hover:text-white transition-colors">Mentions légales</a>
+      </div>
+      <p>&copy; 2026 SANDOKAN TRAVEL. Tous droits réservés.</p>
+    </div>
+  </footer>
+</div>
